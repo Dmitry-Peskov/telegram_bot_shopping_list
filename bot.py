@@ -7,7 +7,7 @@ from aiogram.enums import ParseMode
 from aiogram.methods import DeleteWebhook
 from aiogram.client.default import DefaultBotProperties
 
-from config import Config
+from settings import Config
 
 
 dp = Dispatcher()
