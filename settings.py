@@ -15,6 +15,8 @@ class Config:
     @dataclass(frozen=True)
     class DataBase:
         DSN: str = f"sqlite+aiosqlite:///{os.getcwd()}\\db.sqlite3"
+        POOL_SIZE: int = 20
+        MAX_OVERFLOW: int = 10
         ECHO: bool = True
         AUTOFLUSH: bool = False
         AUTOCOMMIT: bool = False
