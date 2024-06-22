@@ -1,4 +1,5 @@
 import os
+import logging
 from dataclasses import dataclass
 from dotenv import load_dotenv
 
@@ -25,3 +26,8 @@ class Config:
         TELEGRAM_URL: str = os.getenv("DEVELOPER_TELEGRAM_URL")
         GITHUB_URL: str = os.getenv("DEVELOPER_GITHUB_URL")
         VK_URL: str = os.getenv("DEVELOPER_VK_URL")
+
+    @dataclass(frozen=True)
+    class Logging:
+        FORMAT: str = "%(asctime)s | %(levelname)s | %(name)s | %(filename)s | %(funcName)s | %(lineno)d | %(message)s"
+        LEVEL: int = logging.INFO
