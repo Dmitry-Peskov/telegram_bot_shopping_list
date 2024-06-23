@@ -3,7 +3,7 @@ from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy.types import BigInteger, String, DateTime
+from sqlalchemy.types import BigInteger, String, DateTime, Integer
 from sqlalchemy import func, ForeignKey
 
 
@@ -25,7 +25,7 @@ class User(BaseModel):
     fullname: Mapped[str | None] = mapped_column(String(200), nullable=True)
     nickname: Mapped[str | None] = mapped_column(String(200), nullable=True)
 
-    actions: Mapped[List["Action"]] = relationship(back_populates="Users", cascade="all, delete")
+    actions: Mapped[List["Action"]] = relationship(back_populates="user", cascade="all, delete")
 
     def __repr__(self):
         return f"{self.__class__.__name__} ({self.telegram_id=}; {self.fullname=}; {self.nickname=})"
@@ -35,11 +35,11 @@ class Action(BaseModel):
 
     __tablename__ = "Actions"
 
-    id: Mapped[int] = mapped_column(BigInteger,
+    id: Mapped[int] = mapped_column(Integer,
                                     primary_key=True,
                                     autoincrement=True,
-                                    index=True,
-                                    unique=True)
+                                    unique=True,
+                                    index=True)
     created_at: Mapped[datetime.datetime] = mapped_column(
         DateTime,
         nullable=False,
@@ -50,7 +50,7 @@ class Action(BaseModel):
                                                     ondelete="CASCADE"))
     message: Mapped[str] = mapped_column(String, nullable=False, index=True)
     details: Mapped[str | None] = mapped_column(String, nullable=True)
-    user: Mapped["User"] = relationship(back_populates="Actions")
+    user: Mapped["User"] = relationship(back_populates="actions")
 
     def __repr__(self):
         return f"{self.__class__.__name__} ({self.created_at=} ; {self.user_id=} ; {self.message=} ; {self.details=})"
