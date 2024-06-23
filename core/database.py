@@ -9,15 +9,13 @@ class DataBase:
     def __init__(self):
         self.__engine = create_async_engine(url=Config.DataBase.DSN,
                                             echo=Config.DataBase.ECHO,
-                                            pool_size=Config.DataBase.POOL_SIZE,
-                                            max_overflow=Config.DataBase.MAX_OVERFLOW,
                                             )
         self.__session = async_sessionmaker(self.__engine,
                                             expire_on_commit=Config.DataBase.EXPIRE_ON_COMMIT,
                                             autoflush=Config.DataBase.AUTOFLUSH
                                             )
 
-    def add_new_user(self, user: models.User) -> None:
+    async def add_new_user(self, user: models.User) -> None:
         """
         Зарегистрировать нового участника в системе
 
@@ -46,6 +44,17 @@ class DataBase:
                 user = await session.get(models.User, {"telegram_id": telegram_id})
                 result = False if user is None else True
                 return result
+
+    async def add_action(self, action: models.Action) -> None:
+        """
+        Записать событие в БД
+
+        :param action: событие вызванное действиями пользователя
+        :return:
+        """
+        async with self.__session() as session:
+            async with session.begin():
+                session.add(action)
 
 
 DBHelper = DataBase()
