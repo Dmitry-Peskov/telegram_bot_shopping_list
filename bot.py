@@ -8,9 +8,11 @@ from aiogram.methods import DeleteWebhook
 from aiogram.client.default import DefaultBotProperties
 
 from settings import Config
+import handlers
 
 
 dp = Dispatcher()
+dp.include_router(handlers.commands)
 properties = DefaultBotProperties(parse_mode=ParseMode.HTML)
 
 
